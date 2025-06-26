@@ -7,15 +7,28 @@
 //    reject("some error occured");
 //    });
 
-function processData(data, callback) {
-  console.log("Processing: ", data);
+function processData(data) {
+  console.log("Processing:", data);
 
-  //simulate async work with setTimeOut
-  setTimeout(() => {
-    const result = data.toUpperCase();
-    callback(result);
-  }, 1000);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const result = data.toUpperCase();
+      resolve(result); // success
+    }, 1000);
+  });
 }
 
 // now promises thus can be used as an alternate to callbacks
 // to avoid callback hell
+
+processData("hello")
+  .then((result) => {
+    console.log("Result:", result); // Output after 1 second
+    return processData("world");
+  })
+  .then((result) => {
+    console.log("Result:", result);
+  })
+  .catch((err) => {
+    console.error("Error:", err);
+  });
