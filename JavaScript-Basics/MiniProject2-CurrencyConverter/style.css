@@ -70,7 +70,7 @@ form input {
 }
 
 .msg {
-  margin: 2rem 0 2rem 0;
+  margin: 2rem 0 0.75rem 0;
 }
 
 form button {
@@ -79,4 +79,7 @@ form button {
   color: #fff;
   font-size: 1.15rem;
   cursor: pointer;
+}
+.output {
+  margin-bottom: 1rem;
 }
