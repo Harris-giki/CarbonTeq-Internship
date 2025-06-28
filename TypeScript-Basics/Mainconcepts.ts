@@ -94,3 +94,20 @@ const minuNew = (a: number, b: number): number => {
   return a - b;
   // this function has the return type explicilty mentioned
 };
+
+// **type Allias**
+
+type StringOrNum = string | number;
+
+const logDetails = (uid: StringOrNum, item: string) => {
+  console.log(`${item} has the uid of ${uid}`);
+};
+
+type objWithName = {
+  name: string;
+  uid: StringOrNum;
+};
+
+const greet = (user: objWithName) => {
+  console.log(`${user.name} says hello`);
+};
