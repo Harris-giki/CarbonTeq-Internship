@@ -53,3 +53,17 @@ let ninjaTwo: {
   age: number;
   beltcolor: string;
 };
+
+// ** any data-type **
+
+let yourAge: any = 25; //initialized with a number
+yourAge = true; // changed to boolean
+yourAge = "tweentyFive"; // changed to string
+yourAge = { name: "haris", age25: "twentyfive" }; //changed to object
+
+let newerMixed: any[] = [];
+
+newerMixed.push(5);
+newerMixed.push("haris");
+newerMixed.push(true);
+newerMixed.push(mixed);
