@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 40px auto;
+  color: #ff0aa7;
+  text-align: center;
+}
+
+ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+li {
+  padding: 6px 10px;
+  border: 1px solid #eee;
+  margin: 10px auto;
+}
+
+li h4 {
+  color: #ff0aa7;
+  margin: 0;
+  text-transform: capitalize;
+}
+li p {
+  color: #333;
+  margin: 8px 0 0;
+}
+
+footer {
+  background: #eee;
+  padding: 60px;
+  margin-top: 60px;
+}
