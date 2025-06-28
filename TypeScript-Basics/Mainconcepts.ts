@@ -67,3 +67,30 @@ newerMixed.push(5);
 newerMixed.push("haris");
 newerMixed.push(true);
 newerMixed.push(mixed);
+
+// ** function basics **
+
+const add = (a: number, b: number, c?: number | string) => {
+  console.log(a + b);
+
+  // this function has the return type void
+};
+// 'c' is an optional parameter which can be either a number or a string
+
+const addnew = (a: number, b: number, c: number | string = 10) => {
+  console.log(a + b);
+  // this function has the return type void
+};
+// 'c' has a default value that is 10
+
+const minus = (a: number, b: number) => {
+  return a - b;
+};
+
+let result = minus(10, 9);
+// now result has the same type as what was returned by the function
+
+const minuNew = (a: number, b: number): number => {
+  return a - b;
+  // this function has the return type explicilty mentioned
+};
