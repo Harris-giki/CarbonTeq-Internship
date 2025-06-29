@@ -29,4 +29,18 @@ const invOne1 = new Invoice1("maria", "work on the mario website", 250);
 
 // creating an array of class objects
 let invoices1: Invoice1[] = [];
-invoices1.push(invOne);
+invoices1.push(invOne1);
+
+// ** Interfaces **
+// An interface in TypeScript is a way to define the structure of an object — what
+// properties and types it must have — without providing actual implementation.
+
+interface Person {
+  name: string;
+  age: number;
+}
+
+const user: Person = {
+  name: "Haris",
+  age: 20,
+};
