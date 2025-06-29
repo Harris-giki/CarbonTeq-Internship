@@ -44,5 +44,3 @@ const user: Person = {
   name: "Haris",
   age: 20,
 };
-
-// **GENERICs**
