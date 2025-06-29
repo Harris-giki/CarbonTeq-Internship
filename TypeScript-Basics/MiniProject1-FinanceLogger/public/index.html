@@ -11,31 +11,40 @@
       <h1>Finance Logger</h1>
 
       <ul class="item list">
-        <!-- this is where the output list will show -->
+        <!-- Output list goes here -->
       </ul>
     </div>
+
     <footer>
       <form class="new-item-form">
         <div class="field">
           <label>
             Type:
             <select id="type">
-              <option name="invoice">Invoice</option>
-              <option name="payment">Payment</option>
+              <option value="invoice">Invoice</option>
+              <option value="payment">Payment</option>
             </select>
           </label>
-          <div class="field">
-            <label>To / From: </label>
-            <input type="text" id="tofrom" />
-          </div>
-          <div class="field">
-            <label>Amount (PKR): </label>
-            <input type="number" id="amount" />
-          </div>
-          <button>Add</button>
         </div>
+
+        <div class="field">
+          <label>To / From:</label>
+          <input type="text" id="tofrom" />
+        </div>
+
+        <div class="field">
+          <label>Details:</label>
+          <input type="text" id="details" />
+        </div>
+
+        <div class="field">
+          <label>Amount (PKR):</label>
+          <input type="number" id="amount" />
+        </div>
+
+        <button>Add</button>
       </form>
-      <a href="www.linkedin.com/in/harris-giki"></a>
+      <a href="https://www.linkedin.com/in/harris-giki"></a>
     </footer>
 
     <script type="module" src="sandbox.js"></script>
