@@ -1,13 +1,12 @@
-import React from "react";
-import Search from "./components/Search.jsx";
 import { useEffect, useState } from "react";
+import Search from "./components/Search.jsx";
 import Spinner from "./components/Spinner.jsx";
 import MovieCard from "./components/MovieCard.jsx";
-import "./index.css";
+import { useDebounce } from "react-use";
 
-// Use popular movies endpoint - guaranteed to have data
-const API_BASE_URL = "https://api.themoviedb.org/3/movie/popular";
-const API_KEY = import.meta.env.VITE_TMBD_API_KEY;
+const API_BASE_URL = "https://api.themoviedb.org/3";
+
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 const API_OPTIONS = {
   method: "GET",
@@ -19,17 +18,26 @@ const API_OPTIONS = {
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
+
   const [movieList, setMovieList] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  // Debounce the search term to prevent making too many API requests
+  // by waiting for the user to stop typing for 500ms
+  useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
 
-  const fetchMovies = async () => {
+  const fetchMovies = async (query = "") => {
     setIsLoading(true);
     setErrorMessage("");
 
     try {
-      // Fixed: Don't add query params twice
-      const endpoint = `${API_BASE_URL}?language=en-US&page=1`;
+      const endpoint = query.trim()
+        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(
+            query
+          )}&language=en-US&page=1`
+        : `${API_BASE_URL}/movie/popular?language=en-US&page=1`;
+
       const response = await fetch(endpoint, API_OPTIONS);
 
       if (!response.ok) {
@@ -37,14 +45,17 @@ const App = () => {
       }
 
       const data = await response.json();
-      console.log("API Response:", data);
 
-      // TMDB API structure - just check if results exist
-      if (data.results && data.results.length > 0) {
-        setMovieList(data.results);
-      } else {
-        setErrorMessage("No movies found");
+      if (data.Response === "False") {
+        setErrorMessage(data.Error || "Failed to fetch movies");
         setMovieList([]);
+        return;
+      }
+
+      setMovieList(data.results || []);
+
+      if (query && data.results.length > 0) {
+        setMovieList(data.results);
       }
     } catch (error) {
       console.error(`Error fetching movies: ${error}`);
@@ -55,8 +66,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchMovies();
-  }, []);
+    fetchMovies(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
 
   return (
     <main>
