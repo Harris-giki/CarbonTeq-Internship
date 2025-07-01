@@ -1,6 +1,5 @@
 **PROPs**
 props or properties are used to transfer data from one component to another
-
 prop can be anything
 
 1. string
