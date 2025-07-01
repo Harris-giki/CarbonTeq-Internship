@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-  <img src="public/readme/hero.png" alt="Project Banner" />
+  <img src="./banner.png" alt="Project Banner" />
   <br />
   <div>
     <img src="https://img.shields.io/badge/-React_JS-black?style=for-the-badge&logoColor=white&logo=react&color=61DAFB" alt="react.js" />
@@ -19,10 +19,10 @@
 
 ## 📋 Table of Contents
 
-1. 🤖 [Introduction](#introduction)
-2. ⚙️ [Tech Stack](#tech-stack)
-3. 🔋 [Features](#features)
-4. 🤸 [Quick Start](#quick-start)
+1. 🤖 [Introduction](#introduction)  
+2. ⚙️ [Tech Stack](#tech-stack)  
+3. 🔋 [Features](#features)  
+4. 🤸 [Quick Start](#quick-start)  
 
 ---
 
@@ -34,22 +34,23 @@ This project re-implements a movie discovery app using modern web technologies. 
 
 ## ⚙️ Tech Stack
 
-* **[React.js](https://react.dev/)** – Frontend UI framework for building dynamic interfaces.
-* **[Appwrite](https://appwrite.io/)** – Backend-as-a-Service for database, auth, and storage needs.
-* **[Tailwind CSS](https://tailwindcss.com/)** – Utility-first CSS for fast UI development.
-* **[Vite](https://vitejs.dev/)** – Fast build tool and dev server.
-* **[React-use](https://github.com/streamich/react-use)** – A powerful collection of React Hooks.
+* **[React.js](https://react.dev/)** – Frontend UI framework for building dynamic interfaces.  
+* **[TypeScript](https://www.typescriptlang.org/)** – A strongly typed programming language that builds on JavaScript, providing safer and more predictable code through static typing.  
+* **[Appwrite](https://appwrite.io/)** – Backend-as-a-Service for database, auth, and storage needs.  
+* **[Tailwind CSS](https://tailwindcss.com/)** – Utility-first CSS for fast UI development.  
+* **[Vite](https://vitejs.dev/)** – Fast build tool and dev server.  
+* **[React-use](https://github.com/streamich/react-use)** – A powerful collection of React Hooks.  
 
 ---
 
 ## 🔋 Features
 
-✅ Browse trending and popular movies
-✅ Real-time movie search
-✅ Beautiful and minimal UI/UX
-✅ Responsive layout across devices
-✅ Movie ratings, language, and release year info
-✅ Modular architecture and reusable components
+✅ Browse trending and popular movies  
+✅ Real-time movie search  
+✅ Beautiful and minimal UI/UX  
+✅ Responsive layout across devices  
+✅ Movie ratings, language, and release year info  
+✅ Modular architecture and reusable components  
 
 ---
 
@@ -57,15 +58,17 @@ This project re-implements a movie discovery app using modern web technologies. 
 
 **Prerequisites**
 
-* [Git](https://git-scm.com/)
-* [npm](https://www.npmjs.com/)
+* [Git](https://git-scm.com/)  
+* [npm](https://www.npmjs.com/)  
 
 **Clone the Repository**
 
 ```bash
-git clone https://github.com/your-username/your-movie-app.git
-cd your-movie-app
-```
+git clone https://github.com/Harris-giki/CarbonTeq-Internship.git
+cd React-Basics/MiniProject
+````
+
+Further navigate through the React JSX or TS version of the project and then:
 
 **Install Dependencies**
 
@@ -90,8 +93,3 @@ VITE_APPWRITE_COLLECTION_ID=your_collection_id
 ```bash
 npm run dev
 ```
-
-Then navigate to [http://localhost:5173](http://localhost:5173)
-
----
-
