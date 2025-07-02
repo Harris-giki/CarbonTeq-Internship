@@ -1,0 +1,34 @@
+import Counter from "./components/Counter.jsx";
+import Showpie from "./components/Showpie.jsx";
+
+{/* example no.1 */}
+
+# Hello from MDX
+
+<Counter />
+
+{/* example no.2 */}
+
+<h1>Heading!</h1>
+<abbr title="HyperText Markup Language">HTML</abbr> is a lovely language.
+<section>And here is *markdown* in **JSX**!</section>
+
+{/* example no.3  MDX also supports JavaScript expressions inside curly braces: */}
+{(function () {
+const guess = Math.random()
+if (guess > 0.66) {
+return <span style={{color: 'tomato'}}>Look at us.</span>
+}
+if (guess > 0.33) {
+return <span style={{color: 'violet'}}>Who would have guessed?!</span>
+}
+return <span style={{color: 'goldenrod'}}>Not me.</span>
+})()}
+
+{/* {example no. 4}  JS logic (via a wrapper) */}
+
+<br />
+## Directly {Math.PI * 2} in MDX.
+<Showpie value={Math.PI * 2} />
+
+<div>#this is a heading</div>
