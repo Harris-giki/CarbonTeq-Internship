@@ -1,0 +1,120 @@
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "mdxJsxFlowElement",
+      "name": "User",
+      "attributes": [],
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "strong",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Hello",
+                  "position": {
+                    "start": {
+                      "line": 2,
+                      "column": 7,
+                      "offset": 14
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 12,
+                      "offset": 19
+                    }
+                  }
+                }
+              ],
+              "position": {
+                "start": {
+                  "line": 2,
+                  "column": 5,
+                  "offset": 12
+                },
+                "end": {
+                  "line": 2,
+                  "column": 14,
+                  "offset": 21
+                }
+              }
+            },
+            {
+              "type": "text",
+              "value": ",",
+              "position": {
+                "start": {
+                  "line": 2,
+                  "column": 14,
+                  "offset": 21
+                },
+                "end": {
+                  "line": 2,
+                  "column": 15,
+                  "offset": 22
+                }
+              }
+            }
+          ],
+          "position": {
+            "start": {
+              "line": 2,
+              "column": 5,
+              "offset": 12
+            },
+            "end": {
+              "line": 2,
+              "column": 16,
+              "offset": 23
+            }
+          }
+        },
+        {
+          "type": "code",
+          "lang": "javascript",
+          "meta": null,
+          "value": "const f = () => {\r\n    console.log(\"asda\")\r\n}",
+          "position": {
+            "start": {
+              "line": 3,
+              "column": 5,
+              "offset": 29
+            },
+            "end": {
+              "line": 7,
+              "column": 8,
+              "offset": 110
+            }
+          }
+        }
+      ],
+      "position": {
+        "start": {
+          "line": 1,
+          "column": 1,
+          "offset": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 8,
+          "offset": 119
+        }
+      }
+    }
+  ],
+  "position": {
+    "start": {
+      "line": 1,
+      "column": 1,
+      "offset": 0
+    },
+    "end": {
+      "line": 8,
+      "column": 8,
+      "offset": 119
+    }
+  }
+}
