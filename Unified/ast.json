@@ -234,6 +234,39 @@
           "offset": 141
         }
       }
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "value": "this is ~~strikethrough~~",
+          "position": {
+            "start": {
+              "line": 9,
+              "column": 1,
+              "offset": 145
+            },
+            "end": {
+              "line": 9,
+              "column": 26,
+              "offset": 170
+            }
+          }
+        }
+      ],
+      "position": {
+        "start": {
+          "line": 9,
+          "column": 1,
+          "offset": 145
+        },
+        "end": {
+          "line": 9,
+          "column": 26,
+          "offset": 170
+        }
+      }
     }
   ],
   "position": {
@@ -243,9 +276,9 @@
       "offset": 0
     },
     "end": {
-      "line": 7,
-      "column": 31,
-      "offset": 141
+      "line": 10,
+      "column": 1,
+      "offset": 172
     }
   }
 }
