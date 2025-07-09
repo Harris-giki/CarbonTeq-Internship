@@ -22,31 +22,46 @@ function MainLogic(inputs: string[]): void {
   while (i < inputs.length) {
     let token = inputs[i];
     if (isInteger(token)) {
-      stack.push(parseInt(token));
+      const value = parseInt(token);
+      if (value < -32768 || value > 32767)
+        throw new Error("The integer value went out of bounds");
+      else stack.push(value);
     } else if (token === "+") {
       if (stack.length < 2)
         throw new Error("Stack does not have sufficient inputs");
       const a: number = stack.pop()!; // pop can return either a number or a undefined therefore ignore it
       const b: number = stack.pop()!;
-      stack.push(a + b);
+      const result = a + b;
+      if (result < -32768 || result > 32767)
+        throw new Error("The integer value went out of bounds");
+      else stack.push(result);
     } else if (token === "-") {
       if (stack.length < 2)
         throw new Error("Stack does not have sufficient inputs");
       const b: number = stack.pop()!; // pop can return either a number or a undefined therefore ignore it
       const a: number = stack.pop()!;
-      stack.push(a - b); // order of popping is important in substraction and division
+      const result: number = a - b;
+      if (result < -32768 || result > 32767)
+        throw new Error("The integer value went out of bounds");
+      else stack.push(result); // order of popping is important in substraction and division
     } else if (token === "/") {
       if (stack.length < 2)
         throw new Error("Stack does not have sufficient inputs");
       const b: number = stack.pop()!; // pop can return either a number or a undefined therefore ignore it
       const a: number = stack.pop()!;
-      stack.push(a / b);
+      const result: number = a / b;
+      if (result < -32768 || result > 32767)
+        throw new Error("The integer value went out of bounds");
+      else stack.push(result);
     } else if (token === "*") {
       if (stack.length < 2)
         throw new Error("Stack does not have sufficient inputs");
       const a: number = stack.pop()!; // pop can return either a number or a undefined therefore ignore it
       const b: number = stack.pop()!;
-      stack.push(a * b);
+      const result = a * b;
+      if (result < -32768 || result > 32767)
+        throw new Error("The integer value went out of bounds");
+      else stack.push(result);
     }
 
     // handling stack words
