@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const inputs = process.argv.slice(2);
 // built-in property to return array of arguments passed after Node.js run
 const stack = []; // initializing an array of numbers to simulate stack
@@ -56,8 +55,8 @@ function MainLogic(inputs) {
         else if (token === "dup") {
             if (stack.length < 1)
                 throw new Error("Not enough elements to perform 'duplication'");
-            const top = stack[stack.length - 1];
-            stack.push(top);
+            const topElement = stack[stack.length - 1];
+            stack.push(topElement);
         }
         else if (token === "drop") {
             if (stack.length < 1)
@@ -82,7 +81,7 @@ function MainLogic(inputs) {
         // handling user defined methods
         else if (token === ":") {
             const WordName = inputs[++i];
-            if (isInteger(token))
+            if (isInteger(WordName))
                 throw new Error("Cannot use number as word name");
             const definition = []; // an array to store the user specified commands
             i++; // right now we are pointing to the position ahead of the command name
@@ -90,7 +89,7 @@ function MainLogic(inputs) {
                 definition.push(inputs[i]);
                 i++;
             }
-            if (inputs[i] !== ";") {
+            if (i >= inputs.length || inputs[i] !== ";") {
                 throw new Error("there is no ; to terminate the word definition");
             }
             userDefinedWords.set(WordName, definition);
@@ -103,5 +102,4 @@ function MainLogic(inputs) {
     }
 }
 MainLogic(inputs);
-const top = stack[stack.length - 1];
 console.log(stack);

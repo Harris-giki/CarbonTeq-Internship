@@ -1,5 +1,3 @@
-import { error } from "console";
-
 const inputs = process.argv.slice(2);
 // built-in property to return array of arguments passed after Node.js run
 
@@ -55,8 +53,8 @@ function MainLogic(inputs: string[]): void {
     else if (token === "dup") {
       if (stack.length < 1)
         throw new Error("Not enough elements to perform 'duplication'");
-      const top = stack[stack.length - 1];
-      stack.push(top);
+      const topElement = stack[stack.length - 1];
+      stack.push(topElement);
     } else if (token === "drop") {
       if (stack.length < 1)
         throw new Error("Not enough elements to perform 'drop'");
@@ -79,7 +77,8 @@ function MainLogic(inputs: string[]): void {
     // handling user defined methods
     else if (token === ":") {
       const WordName = inputs[++i];
-      if (isInteger(token)) throw new Error("Cannot use number as word name");
+      if (isInteger(WordName))
+        throw new Error("Cannot use number as word name");
       const definition: string[] = []; // an array to store the user specified commands
       i++; // right now we are pointing to the position ahead of the command name
 
@@ -88,7 +87,7 @@ function MainLogic(inputs: string[]): void {
         i++;
       }
 
-      if (inputs[i] !== ";") {
+      if (i >= inputs.length || inputs[i] !== ";") {
         throw new Error("there is no ; to terminate the word definition");
       }
       userDefinedWords.set(WordName, definition);
@@ -101,5 +100,4 @@ function MainLogic(inputs: string[]): void {
 }
 
 MainLogic(inputs);
-const top = stack[stack.length - 1];
 console.log(stack);
