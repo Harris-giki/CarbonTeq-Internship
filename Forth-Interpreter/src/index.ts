@@ -116,3 +116,5 @@ function MainLogic(inputs: string[]): void {
 
 MainLogic(inputs);
 console.log(stack);
+
+// readibility and modular code?
