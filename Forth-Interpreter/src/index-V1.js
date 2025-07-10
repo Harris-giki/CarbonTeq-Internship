@@ -123,3 +123,4 @@ function MainLogic(inputs) {
 }
 MainLogic(inputs);
 console.log(stack);
+// readibility and modular code?
