@@ -1,120 +1,161 @@
-const input = process.argv.slice(2);
-// built-in property to return array of arguments passed after Node.js run
+import * as readline from "readline";
 
-const stackDS: number[] = []; // initializing an array of numbers to simulate stackDS
-// function to check if the input is integer
+// required data structures
+const stackDS: number[] = [];
 
-// using a map/dictionary to store the user-defined commands as key/value
-// note that map is a pre-defined class in TS/JS therefore new keyword to make an instance of that class
-const userDefinedWord = new Map<string, string[]>();
+type Instruction =
+  | { type: "int"; value: number }
+  | { type: "builtin"; value: string }
+  | { type: "word"; value: string };
 
-function checkInteger(str: string): boolean {
-  const num = Number(str);
-  if (isNaN(num)) {
-    // main logic to test for integer input
+const userDefinedWord = new Map<string, Instruction[]>();
+
+// helper function
+
+function checkInteger(string: string): boolean {
+  const number = Number(string);
+  if (isNaN(number)) {
+    // main logic to test for integer inputs
     return false;
   }
-  if (str.includes(".")) return false; // logic to dis-allow floating points
+  if (string.includes(".")) return false; // logic to dis-allow floating points
   return true;
 }
-function MainFunction(input: string[]): void {
-  let i = 0;
-  while (i < input.length) {
-    let token = input[i];
+
+// parser
+
+function Parser(tokens: string[]): Instruction[] {
+  const result: Instruction[] = [];
+
+  for (let token of tokens) {
     if (checkInteger(token)) {
       const value = parseInt(token);
       if (value < -32768 || value > 32767)
-        throw new Error("The integer value went out of bounds");
-      else stackDS.push(value);
-    } else if (token === "+") {
-      if (stackDS.length < 2)
-        throw new Error("stackDS does not have sufficient input");
-      const a: number = stackDS.pop()!; // pop can return either a number or a undefined therefore ignore it
-      const b: number = stackDS.pop()!;
-      const result = a + b;
-      if (result < -32768 || result > 32767)
-        throw new Error("The integer value went out of bounds");
-      else stackDS.push(result);
-    } else if (token === "-") {
-      if (stackDS.length < 2)
-        throw new Error("stackDS does not have sufficient input");
-      const b: number = stackDS.pop()!; // pop can return either a number or a undefined therefore ignore it
-      const a: number = stackDS.pop()!;
-      const result: number = a - b;
-      if (result < -32768 || result > 32767)
-        throw new Error("The integer value went out of bounds");
-      else stackDS.push(result); // order of popping is important in substraction and division
-    } else if (token === "/") {
-      if (stackDS.length < 2)
-        throw new Error("stackDS does not have sufficient input");
-      const b: number = stackDS.pop()!; // pop can return either a number or a undefined therefore ignore it
-      const a: number = stackDS.pop()!;
-      const result: number = a / b;
-      if (result < -32768 || result > 32767)
-        throw new Error("The integer value went out of bounds");
-      else stackDS.push(result);
-    } else if (token === "*") {
-      if (stackDS.length < 2)
-        throw new Error("stackDS does not have sufficient input");
-      const a: number = stackDS.pop()!; // pop can return either a number or a undefined therefore ignore it
-      const b: number = stackDS.pop()!;
-      const result = a * b;
-      if (result < -32768 || result > 32767)
-        throw new Error("The integer value went out of bounds");
-      else stackDS.push(result);
+        throw new Error(`Integer out of bounds: ${value}`);
+      result.push({ type: "int", value: value });
+    } else if (
+      ["+", "-", "*", "/", "dup", "drop", "swap", "over"].includes(token)
+    ) {
+      result.push({ type: "builtin", value: token });
+    } else if (/^[a-z]+$/.test(token)) {
+      result.push({ type: "word", value: token });
+    } else {
+      throw new Error(`Invalid token: ${token}`);
     }
+  }
+  return result;
+}
 
-    // handling stackDS words
-    else if (token === "dup") {
-      if (stackDS.length < 1)
-        throw new Error("Not enough elements to perform 'duplication'");
-      const topElement = stackDS[stackDS.length - 1];
-      stackDS.push(topElement);
-    } else if (token === "drop") {
-      if (stackDS.length < 1)
-        throw new Error("Not enough elements to perform 'drop'");
-      stackDS.pop();
-    } else if (token === "swap") {
-      if (stackDS.length < 2)
-        throw new Error("Not enough elements to perform 'Swap'");
-      const a: number = stackDS.pop()!;
-      const b: number = stackDS.pop()!;
-      stackDS.push(a);
-      stackDS.push(b);
-    } else if (token === "over") {
-      // method to copy the second to top element and push to the top again
-      if (stackDS.length < 2)
-        throw new Error("Not enough elements to perform 'Over'");
-      const second_in_top = stackDS[stackDS.length - 2];
-      stackDS.push(second_in_top);
-    }
+// Evaluater
 
-    // handling user defined methods
-    else if (token === ":") {
-      const WordName = input[++i];
-      if (checkInteger(WordName))
-        throw new Error("Cannot use number as word name");
-      const definition: string[] = []; // an array to store the user specified commands
-      i++; // right now we are pointing to the position ahead of the command name
+function evaluate(Instruction: Instruction[]): void {
+  for (const instr of Instruction) {
+    if (instr.type === "int") {
+      stackDS.push(instr.value);
+    } else if (instr.type === "builtin") {
+      const op = instr.value;
 
-      while (i < input.length && input[i] != ";") {
-        definition.push(input[i]);
-        i++;
+      // Arithmetic
+      if (op === "+") {
+        if (stackDS.length < 2) throw new Error("Not enough values for '+'");
+        stackDS.push(stackDS.pop()! + stackDS.pop()!);
+      } else if (op === "-") {
+        if (stackDS.length < 2) throw new Error("Not enough values for '-'");
+        const b = stackDS.pop()!,
+          a = stackDS.pop()!;
+        stackDS.push(a - b);
+      } else if (op === "*") {
+        if (stackDS.length < 2) throw new Error("Not enough values for '*'");
+        stackDS.push(stackDS.pop()! * stackDS.pop()!);
+      } else if (op === "/") {
+        if (stackDS.length < 2) throw new Error("Not enough values for '/'");
+        const b = stackDS.pop()!,
+          a = stackDS.pop()!;
+        stackDS.push(Math.trunc(a / b)); // Truncated integer division
+
+        // Stack operations
+      } else if (op === "dup") {
+        if (stackDS.length < 1) throw new Error("Stack underflow on 'dup'");
+        stackDS.push(stackDS[stackDS.length - 1]);
+      } else if (op === "drop") {
+        if (stackDS.length < 1) throw new Error("Stack underflow on 'drop'");
+        stackDS.pop();
+      } else if (op === "swap") {
+        if (stackDS.length < 2) throw new Error("Stack underflow on 'swap'");
+        const a = stackDS.pop()!,
+          b = stackDS.pop()!;
+        stackDS.push(a, b);
+      } else if (op === "over") {
+        if (stackDS.length < 2) throw new Error("Stack underflow on 'over'");
+        stackDS.push(stackDS[stackDS.length - 2]);
       }
-
-      if (i >= input.length || input[i] !== ";") {
-        throw new Error("there is no ; to terminate the word definition");
-      }
-      userDefinedWord.set(WordName, definition);
-    } else if (userDefinedWord.has(token)) {
-      const definition: string[] = userDefinedWord.get(token)!; // use .get method to get a value from a map
-      MainFunction([...definition]); // recursively run it
+    } else if (instr.type === "word") {
+      if (!userDefinedWord.has(instr.value))
+        throw new Error(`Undefined word: ${instr.value}`);
+      const def = userDefinedWord.get(instr.value)!;
+      evaluate(def); // Recursive evaluation }
     }
-    i++;
   }
 }
 
-MainFunction(input);
-console.log(stackDS);
+function MainFunction(input: string[]): void {
+  let i = 0;
+  while (i < input.length) {
+    const token = input[i];
+    if (token === ":") {
+      const wordName = input[++i];
+      if (checkInteger(wordName))
+        throw new Error("Cannot use number as word name");
 
-// readibility and modular code?
+      const defTokens: string[] = [];
+      while (++i < input.length && input[i] !== ";") {
+        defTokens.push(input[i]);
+      }
+
+      if (i >= input.length || input[i] !== ";") {
+        throw new Error("Missing ';' to end definition");
+      }
+
+      const parsedDef = Parser(defTokens); // definition stored as language primative
+      userDefinedWord.set(wordName, parsedDef);
+    } else {
+      const remaining = input.slice(i);
+      const parsed = Parser(remaining);
+      evaluate(parsed);
+      break; // once instructions start, stop parsing further input
+    }
+
+    i++;
+  }
+}
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  prompt: "Forth> ",
+});
+
+console.log("Mini Forth Interpreter: Type 'exit' to quit.");
+rl.prompt();
+
+rl.on("line", (line) => {
+  const input = line.trim().toLowerCase().split(/\s+/);
+
+  if (input[0] === "exit" || input[0] === "quit") {
+    rl.close(); // End session
+    return;
+  }
+
+  try {
+    MainFunction(input);
+    console.log("Stack:", stackDS);
+  } catch (err) {
+    console.error("Error:", (err as Error).message);
+  }
+
+  rl.prompt(); // Keep session open
+});
+
+rl.on("close", () => {
+  console.log("Closed Program");
+  process.exit(0);
+});
