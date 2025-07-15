@@ -1,6 +1,7 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import { getUserById, updateUserEmail } from './db';
-
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { getUserById, updateUserEmail } from "./db";
+import dotenv from "dotenv";
+dotenv.config();
 // Type definitions
 interface DatabaseArguments {
   user_id?: number;
@@ -8,13 +9,13 @@ interface DatabaseArguments {
 }
 
 interface ClassificationResult {
-  category: 'database' | 'general';
+  category: "database" | "general";
   function?: string;
   arguments?: DatabaseArguments;
 }
 
 // Initialize Gemini API
-const API_KEY = process.env.GOOGLE_API_KEY || "Your-api-key";
+const API_KEY: string = process.env.GOOGLE_API_KEY!;
 const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -39,7 +40,7 @@ User: "${prompt}"
   try {
     const result = await model.generateContent(classifyPrompt);
     const response = result.response.text();
-    
+
     console.log("LLM Classification Output:");
     console.log(response);
 
@@ -49,11 +50,13 @@ User: "${prompt}"
       if (match) {
         try {
           const args: DatabaseArguments = JSON.parse(match[1]);
-          
+
           if (response.includes("get_user_by_id")) {
             if (args.user_id) {
               const result = await getUserById(args.user_id);
-              return typeof result === 'string' ? result : JSON.stringify(result, null, 2);
+              return typeof result === "string"
+                ? result
+                : JSON.stringify(result, null, 2);
             } else {
               return "User ID is required.";
             }
@@ -73,20 +76,19 @@ User: "${prompt}"
     // For general requests, generate a response
     const generalResult = await model.generateContent(prompt);
     return generalResult.response.text();
-    
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return "An error occurred while processing your request.";
   }
 }
 
 // Interactive loop for Node.js
 async function runInteractiveLoop(): Promise<void> {
-  const readline = require('readline');
-  
+  const readline = require("readline");
+
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   });
 
   const askQuestion = (question: string): Promise<string> => {
@@ -98,23 +100,22 @@ async function runInteractiveLoop(): Promise<void> {
   };
 
   console.log("AI Agent started. Type 'exit' or 'quit' to stop.");
-  
+
   while (true) {
     try {
       const prompt = await askQuestion("\nYou: ");
-      
-      if (prompt.toLowerCase() === 'exit' || prompt.toLowerCase() === 'quit') {
+
+      if (prompt.toLowerCase() === "exit" || prompt.toLowerCase() === "quit") {
         break;
       }
-      
+
       const result = await classifyAndRespond(prompt);
       console.log("Agent:", result);
-      
     } catch (error) {
       console.error("Error:", error);
     }
   }
-  
+
   rl.close();
 }
 
