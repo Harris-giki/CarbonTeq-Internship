@@ -1,23 +1,25 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// importing a class provided by Google’s Gemini SDK allowing to interact with the Gemini model.
+
 import { getUserById, updateUserEmail } from "./db";
+
+// importing two functions defined in the db project file
+
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config(); // reads the .env and helps set the API Key
+console.log("API Key:", process.env.GOOGLE_API_KEY);
+
 // Type definitions
 interface DatabaseArguments {
   user_id?: number;
   new_email?: string;
-}
-
-interface ClassificationResult {
-  category: "database" | "general";
-  function?: string;
-  arguments?: DatabaseArguments;
-}
+} // defining an object that can have user_id/email or both
 
 // Initialize Gemini API
-const API_KEY: string = process.env.GOOGLE_API_KEY!;
-const genAI = new GoogleGenerativeAI(API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const API_KEY: string = process.env.GOOGLE_API_KEY!; // used exclamation mark to ignore ts constraint
+const genAI = new GoogleGenerativeAI(API_KEY); // creating an instance of the imported class with the api key passed
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" }); // specifiying our model
 
 async function classifyAndRespond(prompt: string): Promise<string> {
   const classifyPrompt = `
@@ -39,49 +41,63 @@ User: "${prompt}"
 
   try {
     const result = await model.generateContent(classifyPrompt);
-    const response = result.response.text();
+    const response = result.response.text(); // extracting text from Gemini response
 
-    console.log("LLM Classification Output:");
+    console.log("LLM Response: ");
     console.log(response);
 
     if (response.includes("database")) {
-      // Extract JSON part from the "Arguments" line
-      const match = response.match(/Arguments:\s*(\{.*\})/);
-      if (match) {
-        try {
-          const args: DatabaseArguments = JSON.parse(match[1]);
+      const lines = response.split("\n");
+      let args: DatabaseArguments | null = null;
 
-          if (response.includes("get_user_by_id")) {
-            if (args.user_id) {
-              const result = await getUserById(args.user_id);
-              return typeof result === "string"
-                ? result
-                : JSON.stringify(result, null, 2);
-            } else {
-              return "User ID is required.";
-            }
-          } else if (response.includes("update_user_email")) {
-            if (args.user_id && args.new_email) {
-              return await updateUserEmail(args.user_id, args.new_email);
-            } else {
-              return "User ID and new email are required.";
-            }
+      for (const line of lines) {
+        if (line.trim().startsWith("Arguments:")) {
+          const jsonPart = line.split("Arguments:")[1].trim();
+          try {
+            args = JSON.parse(jsonPart);
+          } catch (error) {
+            console.log("Error parsing Arguments JSON");
+            return "Invalid JSON format in Arguments.";
           }
-        } catch (error) {
-          return "Couldn't parse arguments.";
         }
       }
-    }
 
-    // For general requests, generate a response
-    const generalResult = await model.generateContent(prompt);
-    return generalResult.response.text();
+      if (!args) {
+        return "No Arguments found";
+      }
+
+      if (response.includes("get_user_by_id")) {
+        if (args.user_id) {
+          const result = await getUserById(args.user_id);
+          if (typeof result === "string") {
+            return result;
+          } else {
+            return JSON.stringify(result, null, 2);
+          }
+        } else {
+          return "User ID is required";
+        }
+      }
+
+      if (response.includes("update_user_email")) {
+        if (args.user_id && args.new_email) {
+          return await updateUserEmail(args.user_id, args.new_email);
+        } else {
+          return "User ID and new email are required.";
+        }
+      }
+
+      return "Unknown database command.";
+    } else {
+      // General prompt – not a database task
+      const generalResult = await model.generateContent(prompt);
+      return generalResult.response.text();
+    }
   } catch (error) {
     console.error("Error:", error);
     return "An error occurred while processing your request.";
   }
 }
-
 // Interactive loop for Node.js
 async function runInteractiveLoop(): Promise<void> {
   const readline = require("readline");
