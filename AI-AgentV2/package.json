@@ -1,0 +1,33 @@
+{
+  "name": "ai-agent-typescript",
+  "version": "1.0.0",
+  "description": "AI Agent with database integration in TypeScript",
+  "main": "dist/agentv2.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/agentv2.js",
+    "dev": "ts-node src/agentv2.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.15.0",
+    "dotenv": "^17.2.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.8",
+    "@types/sqlite3": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "database",
+    "typescript",
+    "gemini"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

@@ -19,7 +19,7 @@ interface DatabaseArguments {
 // Initialize Gemini API
 const API_KEY: string = process.env.GOOGLE_API_KEY!; // used exclamation mark to ignore ts constraint
 const genAI = new GoogleGenerativeAI(API_KEY); // creating an instance of the imported class with the api key passed
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" }); // specifiying our model
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // specifiying our model
 
 async function classifyAndRespond(prompt: string): Promise<string> {
   const classifyPrompt = `
